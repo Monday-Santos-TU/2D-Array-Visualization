@@ -5,15 +5,19 @@ public class Board extends JPanel implements Runnable {
 	private Thread thread;
 	private Map mp;
 	private int twoDee[][];
+	private KeyHandler kh;
 
 	public Board() {
+		kh = new KeyHandler();
 		thread = new Thread(this);
 		setPreferredSize(new Dimension(480, 480));
 		setVisible(true);
+		setFocusable(true);
 		setBackground(new Color(211, 211, 211));
+		addKeyListener(kh);
 		
 		mp = new Map();
-		twoDee = mp.createMap("array.txt", 5, 5);
+		resetArray();
 
 		init();
 	}
@@ -45,6 +49,10 @@ public class Board extends JPanel implements Runnable {
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {}
+	}
+
+	public void resetArray() {
+		twoDee = mp.createMap("array.txt", 5, 5);
 	}
 
 	public void reverseRow(int[][] arr) {
@@ -98,10 +106,42 @@ public class Board extends JPanel implements Runnable {
 
 	@Override
 	public void run() {
-		draw();
-		reverseRow(twoDee);
-		//reverseAll(twoDee);
-		//reverseCol(twoDee);
+		double drawInterval = 1000000000/60;
+		double nextDrawTime = System.nanoTime() + drawInterval;
+
+		repaint();
+		while(thread != null) {
+			if(kh.one) {
+				resetArray();
+				reverseRow(twoDee);
+				kh.one = false;
+			}
+			if(kh.two) {
+				resetArray();
+				reverseCol(twoDee);
+				kh.two = false;
+			}
+			if(kh.three) {
+				resetArray();
+				reverseAll(twoDee);
+				kh.three = false;
+			}
+
+			try {
+				double remainingTime = nextDrawTime - System.nanoTime();
+				remainingTime /= 1000000;
+				
+				if(remainingTime < 0) {
+					remainingTime = 0;
+				}
+
+				Thread.sleep((long) remainingTime);
+				
+				nextDrawTime += drawInterval;
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public static void main(String args[]) {

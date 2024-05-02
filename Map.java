@@ -41,17 +41,17 @@ public class Map extends JPanel {
             for(int y = 0; y < arr[x].length; y++) {
                 int pos = arr[x][y];
                 if(pos == 0) {
-                    Texture.draw(g2d, screenX, screenY, tileWidth, tileHeight, Color.white);
+                    draw(g2d, screenX, screenY, tileWidth, tileHeight, Color.white);
                 } else if(pos == 1) {
-                    Texture.draw(g2d, screenX, screenY, tileWidth, tileHeight, Color.red);
+                    draw(g2d, screenX, screenY, tileWidth, tileHeight, Color.red);
                 } else if(pos == 2) {
-                    Texture.draw(g2d, screenX, screenY, tileWidth, tileHeight, Color.yellow);
+                    draw(g2d, screenX, screenY, tileWidth, tileHeight, Color.yellow);
                 } else if(pos == 3) {
-                    Texture.draw(g2d, screenX, screenY, tileWidth, tileHeight, Color.green);
+                    draw(g2d, screenX, screenY, tileWidth, tileHeight, Color.green);
                 } else if(pos == 4) {
-                    Texture.draw(g2d, screenX, screenY, tileWidth, tileHeight, Color.blue);
+                    draw(g2d, screenX, screenY, tileWidth, tileHeight, Color.blue);
                 } else if(pos == 5) {
-                    Texture.draw(g2d, screenX, screenY, tileWidth, tileHeight, purp);
+                    draw(g2d, screenX, screenY, tileWidth, tileHeight, purp);
                 }
                 screenX += tileWidth + 4;
             }
@@ -59,4 +59,9 @@ public class Map extends JPanel {
             screenY += tileHeight + 4;
         }
     }
+
+    public void draw(Graphics g2d, int screenX, int screenY, int width, int height, Color color) {
+		g2d.setColor(color);
+		g2d.fillRect(screenX, screenY, width, height);
+	}
 }
